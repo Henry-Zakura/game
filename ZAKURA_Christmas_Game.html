@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="ZAKURA 櫻花薈打地鼠遊戲。打中一下，即揭曉一份禮物。">
+<title>ZAKURA 櫻花薈｜聖誕狂歡小遊戲</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff5ef;color:#4e2537;font-family:system-ui,sans-serif}button{font:inherit;cursor:pointer;touch-action:manipulation}button:focus-visible,summary:focus-visible{outline:3px solid #804282;outline-offset:4px}main{width:min(920px,100%);margin:auto;padding:24px 18px 48px}.brand{display:flex;align-items:center;gap:9px;font-weight:850;letter-spacing:.12em;font-size:15px;margin-bottom:20px}.brand b{color:#a62b5d;font-size:22px}.hero{text-align:center;border:1px solid #edb5c5;border-radius:32px;padding:25px clamp(9px,4vw,42px) 22px;background:radial-gradient(circle at 13% 9%,#ffffffbd 0 4px,transparent 5px),radial-gradient(circle at 88% 22%,#ffffffba 0 6px,transparent 7px),linear-gradient(145deg,#ffe4ec,#ffc6d7 75%,#ffdcca);box-shadow:0 8px 0 #f4c9ca}.intro{position:relative}.intro:before,.intro:after{content:'✿';position:absolute;color:#ab3d68;opacity:.6;font-size:clamp(20px,5vw,44px);top:25%;pointer-events:none}.intro:before{left:7%;transform:rotate(-20deg)}.intro:after{right:7%;transform:rotate(20deg)}h1{font-size:clamp(35px,8vw,70px);letter-spacing:-.07em;line-height:1.05;margin:3px 0 12px;color:#762447;font-weight:950}p{line-height:1.6}.intro p{margin:0 0 20px}.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px clamp(2px,2vw,17px);border-radius:23px;background:#fff4eeac;padding:10px clamp(3px,2vw,20px) 15px;border:1px solid #fff9f4}.hole{position:relative;aspect-ratio:1/1.03;border:0;background:none;padding:0;isolation:isolate;border-radius:18px}.rim,.pit{position:absolute;left:4%;right:4%;bottom:5%;height:32%;border-radius:50%;background:#d2858e;box-shadow:0 4px 0 #b96477}.pit{left:11%;right:11%;bottom:10%;height:22%;background:#642e46;box-shadow:inset 0 4px 0 #522238}.pocket{position:absolute;inset:0 0 18%;overflow:hidden;border-radius:0 0 45% 45%}.mole{position:absolute;left:16%;right:16%;bottom:0;height:79%;border-radius:49% 49% 35% 35%;background:#a96953;border:2px solid #773e40;box-shadow:inset -5px -7px 0 #8e5147;transform:translateY(110%);transition:transform .16s ease;color:#4b292c}.mole:before,.mole:after{content:'';position:absolute;top:-5%;width:28%;height:28%;background:#db958f;border:2px solid #773e40;border-radius:50%;z-index:-1}.mole:before{left:0}.mole:after{right:0}.face{position:absolute;left:18%;right:18%;height:34%;top:45%;border-radius:50%;background:#ffd7ba}.face:before{content:'';position:absolute;width:22%;height:35%;left:39%;top:3%;border-radius:50%;background:#632e3b}.face:after{content:'';position:absolute;width:11%;height:27%;left:44%;top:40%;border-radius:0 0 50% 50%;background:white}.eyes{position:absolute;left:24%;right:24%;top:28%;display:flex;justify-content:space-between}.eyes i{width:13%;aspect-ratio:.8;border-radius:50%;background:#40232d}.live .mole,.demo .mole{transform:translateY(0)}.live{background:#fff3d9;box-shadow:inset 0 0 0 2px #eeae54}.live:active .mole{transform:translateY(14%)}.action{border:0;border-radius:100px;background:#982955;color:white;font-weight:800;padding:12px 34px;min-height:48px;box-shadow:0 4px 0 #671b3e}.action:disabled{opacity:.72;cursor:default}.status{margin:14px 0 8px;min-height:26px;font-size:14px}dialog{width:min(540px,calc(100% - 28px));border:1px solid #efbbca;border-radius:26px;padding:24px;color:#54263d;background:#fff8f2;text-align:center;box-shadow:0 14px 50px #4a1d4344}dialog::backdrop{background:#41132a8a}dialog h2{margin:5px 0;font-size:28px}.secondary{background:none;border:0;color:#762447;text-decoration:underline;padding:12px;display:block;margin:4px auto 0}.note{font-size:13px;color:#71465a}@media(max-width:570px){.board{row-gap:10px}.hole{aspect-ratio:1/1.23}}@media(prefers-reduced-motion:reduce){.mole{transition:none}}
+
+.coupon{--accent:#f4a8c2;position:relative;margin:16px 0 10px;padding:18px 20px 14px;border:1px solid #bb8540;border-radius:18px;background:radial-gradient(circle at 100% 0%,var(--accent),transparent 69%),linear-gradient(125deg,#fffaf0 33%,var(--accent));overflow:hidden}
+.coupon:before,.coupon:after{content:"";position:absolute;top:50%;width:18px;height:18px;background:#fff8f2;border:1px solid #bb8540;border-radius:50%;transform:translateY(-50%)}
+.coupon:before{left:-10px}.coupon:after{right:-10px}
+.coupon header{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px;font-weight:850;text-align:left}
+.coupon .stamp{display:flex;align-items:center;gap:6px}.coupon .stamp span{font-size:20px}
+.coupon h2{font-size:clamp(23px,6vw,38px);line-height:1.18;color:#862048;margin:17px 0 10px;overflow-wrap:anywhere}
+.coupon p{border-top:1px dashed #a66b7c;padding-top:11px;margin:0;font-size:14px}
+
+/* A five-petal cherry blossom hammer follows the pointer inside the board. */
+.board{position:relative}
+.hammer{position:absolute;z-index:3;left:0;top:0;width:60px;height:72px;pointer-events:none;visibility:hidden;transform:translate(var(--x,0px),var(--y,0px)) translate(-30px,-26px)}
+.hammer.visible{visibility:visible}
+.hammer-shape{position:absolute;inset:0;transform:rotate(-26deg);transform-origin:30px 26px;filter:drop-shadow(1px 3px 2px #74284650)}
+.hammer.swing .hammer-shape{animation:whack .28s ease-out}
+.handle{position:absolute;top:28px;left:25px;width:11px;height:41px;border-radius:7px;background:linear-gradient(90deg,#fff0c5,#e3a04a);border:1px solid #a86a34}
+.flower{position:absolute;left:30px;top:26px;width:0;height:0}
+.petal{position:absolute;width:19px;height:25px;left:-9.5px;bottom:-4px;transform-origin:50% calc(100% - 4px);transform:rotate(var(--angle));border-radius:48% 48% 55% 55%;background:linear-gradient(#f996bd,#e64b8c);border:1px solid #a53665;box-shadow:inset 0 0 0 2px #ffd7e6;clip-path:polygon(0 0,39% 0,50% 14%,61% 0,100% 0,100% 100%,0 100%)}
+.flower:after{content:"";position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:50%;background:#ffe68f;border:1px solid #c77959}
+@keyframes whack{0%{transform:rotate(-48deg)}36%{transform:rotate(36deg) scale(.9)}100%{transform:rotate(-26deg)}}
+.mole{left:12%;right:12%;height:78%;border-color:#8a4d4d;background:radial-gradient(ellipse at 40% 12%,#eac2a7,#bd806a 72%);box-shadow:inset -4px -5px 0 #a96b5b}
+.mole:before,.mole:after{top:-9%;width:29%;height:30%;background:#ffb0bf;border-color:#8a4d4d;box-shadow:inset 0 0 0 3px #d79881}
+.mole:before{left:3%}.mole:after{right:3%}
+.eyes{left:22%;right:22%;top:29%}
+.eyes i{width:20%;background:radial-gradient(circle at 33% 27%,white 0 17%,transparent 20%),radial-gradient(circle at 72% 65%,#f5d4cb 0 9%,transparent 12%),#422537}
+.face{left:25%;right:25%;top:49%;height:32%;background:#ffe2c8}
+.face:after{width:27%;height:35%;left:36%;background:linear-gradient(90deg,#fff 45%,#e6b4a8 46% 54%,#fff 55%)}
+.cheeks{position:absolute;left:12%;right:12%;top:50%;display:flex;justify-content:space-between}
+.cheeks i{width:20%;aspect-ratio:1.7;border-radius:50%;background:#f792a8}
+@media(pointer:fine){.board.playing,.board.playing .hole{cursor:none}}
+@media(prefers-reduced-motion:reduce){.hammer.swing .hammer-shape{animation:none}}
+
+/* Christmas styling for the page, game board, and prize dialog. */
+body{
+  min-height:100vh;color:#fff3dc;background-color:#102d28;
+  background-image:radial-gradient(circle at 14% 22%,#fff7dd9e 0 1px,transparent 2px),radial-gradient(circle at 71% 32%,#fff7dd70 0 2px,transparent 3px),radial-gradient(circle at 40% 70%,#fff7dd55 0 1px,transparent 2px),radial-gradient(ellipse at 50% 0%,#32624b,#102d28 70%);
+  background-size:173px 149px,213px 181px,107px 123px,auto;
+}
+main{width:min(850px,100%);padding-top:22px}
+.brand{justify-content:center;letter-spacing:.17em;color:#fff0d5}
+.brand b{color:#f596ac}
+.hero{
+  position:relative;border:1px solid #e2b875;border-radius:28px;
+  padding:23px clamp(9px,4vw,38px) 27px;background:linear-gradient(145deg,#7e283a,#501b29 75%);
+  box-shadow:0 7px 0 #30171c,0 17px 40px #081c186e;
+}
+.lights{
+  display:flex;justify-content:space-around;align-items:flex-start;
+  border-top:2px solid #eac895;border-radius:50%;height:25px;margin:0 4% 12px;
+}
+.lights i{
+  background:#ffd98c;width:9px;height:13px;border-radius:50%;
+  box-shadow:0 0 13px #ffd98cb5;transform:rotate(-12deg);margin-top:-4px;
+}
+.lights i:nth-child(3n+1){background:#f594aa;box-shadow:0 0 13px #f594aab5;transform:rotate(10deg)}
+.lights i:nth-child(3n+2){background:#a8dfb4;box-shadow:0 0 13px #a8dfb4b5}
+.intro:before,.intro:after{content:'❄';color:#fff2da;top:8%;opacity:.65}
+.intro:before{left:2%}.intro:after{right:2%}
+h1{color:#fff1cf;font-size:clamp(27px,7.4vw,64px);letter-spacing:-.045em;text-shadow:0 3px 0 #36151a}
+.intro p{color:#fff3e1;font-size:clamp(13px,3.7vw,17px)}
+.board{
+  border:1px solid #f3d39e;background:radial-gradient(circle at 13% 24%,#fff 0 1px,transparent 2px) 0 0/61px 59px,linear-gradient(155deg,#fffdf4,#d9ebe0);
+  box-shadow:inset 0 0 0 3px #fff9e9;
+}
+.rim{background:#699980;box-shadow:0 4px 0 #466b58}
+.pit{background:#203e36;box-shadow:inset 0 4px 0 #122820}
+.live{background:#fff1c2;box-shadow:inset 0 0 0 2px #dab163}
+.santa-hat{
+  position:absolute;z-index:1;top:-24%;left:29%;width:49%;height:32%;transform:rotate(16deg);
+  border-bottom:clamp(2px,.6vw,6px) solid #fff9ed;border-radius:70% 20% 20% 25%;background:#be2840;
+}
+.santa-hat:after{
+  content:'';position:absolute;right:-11%;top:-7%;width:27%;aspect-ratio:1;
+  border-radius:50%;background:#fff9ed;
+}
+.mole{height:68%}
+.action{background:linear-gradient(#ffe0a0,#f3bf66);color:#492127;box-shadow:0 4px 0 #a3672e}
+button:focus-visible,.board:focus-visible{outline:3px solid #ffd98c;outline-offset:4px}
+dialog{
+  background:#12392e;color:#fff5dd;border:1px solid #e2b875;
+  box-shadow:0 16px 60px #071c18b0;
+}
+dialog::backdrop{background:#081d18bf}
+dialog .note,.secondary{color:#fff1d4}
+.coupon{color:#54263d;border-color:#d0a25d}
+.coupon:before,.coupon:after{background:#12392e}
+@media(max-width:420px){
+  main{padding-inline:12px}
+  .intro:before,.intro:after{top:49%;font-size:15px}
+  .lights i{width:7px;height:10px}
+}
+</style>
+</head>
+<body>
+<main>
+<header class="brand"><b aria-hidden="true">✿</b>ZAKURA 櫻花薈</header>
+<section class="hero" aria-labelledby="title">
+<div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="intro"><h1 id="title">聖誕狂歡小遊戲</h1><p>見到地鼠打中就可以獲得小禮物</p></div>
+<div id="board" class="board" role="group" aria-label="打地鼠遊戲區"></div>
+<p class="status" id="status" aria-live="polite">準備好就撳開始！</p>
+<button class="action" id="start">開始遊戲</button>
+</section>
+</main>
+<dialog id="result" aria-labelledby="result-title">
+<div>🎉 打中喇！你抽中</div>
+<article class="coupon" id="coupon">
+<header><span class="stamp"><span id="result-icon" aria-hidden="true"></span>聖誕限定優惠券</span><span>ZAKURA 櫻花薈</span></header>
+<h2 id="result-title"></h2><p id="result-detail"></p>
+</article>
+<p class="note">試玩結果，供預覽用。</p>
+<form method="dialog"><button class="action" id="again" value="again">再玩一次</button><button class="secondary" value="close">關閉</button></form>
+</dialog>
+<script>
+const brands = "適用品牌：Rubyskin、BB rose、Febble、BK、NG、Charms、Beauty Latte。";
+const prizes = [
+  ["🎟️", "HK$100 現金券", "單一消費滿 HK$599，即減 HK$100。"],
+  ["🛍️", "指定品牌買一送一", brands + "詳細適用貨品及贈品安排以門市公布為準。"],
+  ["👝", "免費品牌化妝袋", "多款款式任選，實際款式及顏色視乎門市存貨。"],
+  ["💋", "ZAKURA 唇膜一包", "每人每單限獲一包。"],
+  ["🎫", "HK$50 現金券", "單一消費滿 HK$499，即減 HK$50。"],
+  ["🎁", "指定品牌滿 HK$180 即減 HK$50", brands]
+];
+
+const board = document.querySelector("#board");
+const start = document.querySelector("#start");
+const status = document.querySelector("#status");
+const result = document.querySelector("#result");
+let active = -1;
+let timer;
+let playing = false;
+
+const holes = Array.from({ length: 10 }, (_, index) => {
+  const hole = document.createElement("button");
+  hole.type = "button";
+  hole.className = "hole";
+  hole.tabIndex = -1;
+  hole.setAttribute("aria-label", "第 " + (index + 1) + " 個洞");
+  hole.innerHTML = '<span class="rim"></span><span class="pit"></span><span class="pocket" aria-hidden="true"><span class="mole"><span class="santa-hat"></span><span class="eyes"><i></i><i></i></span><span class="cheeks"><i></i><i></i></span><span class="face"></span></span></span>';
+  hole.addEventListener("click", event => tapHole(event, index));
+  board.append(hole);
+  return hole;
+});
+const hammer = document.createElement("span");
+hammer.className = "hammer";
+hammer.setAttribute("aria-hidden", "true");
+const petals = Array.from({ length: 5 }, (_, index) =>
+  '<i class="petal" style="--angle:' + index * 72 + 'deg"></i>'
+).join("");
+hammer.innerHTML = '<span class="hammer-shape"><span class="handle"></span><span class="flower">' + petals + '</span></span>';
+board.append(hammer);
+let hammerTimer;
+let retryReady = false;
+
+function positionHammer(event) {
+  const bounds = board.getBoundingClientRect();
+  hammer.style.setProperty("--x", (event.clientX - bounds.left) + "px");
+  hammer.style.setProperty("--y", (event.clientY - bounds.top) + "px");
+  hammer.classList.add("visible");
+}
+
+function tapHole(event, index) {
+  if (!playing) return;
+  if (event.detail > 0) {
+    positionHammer(event);
+    hammer.classList.remove("swing");
+    void hammer.offsetWidth;
+    hammer.classList.add("swing");
+    clearTimeout(hammerTimer);
+    hammerTimer = setTimeout(() => hammer.classList.remove("swing", "visible"), 290);
+  }
+  if (index !== active && !retryReady) {
+    clearTimeout(timer);
+    moveMole(index);
+    retryReady = true;
+    status.textContent = "地鼠停低咗！同一格再撳一下就中。";
+    return;
+  }
+  hit(active, event.detail > 0);
+}
+
+board.addEventListener("pointermove", event => {
+  if (playing && event.pointerType === "mouse") positionHammer(event);
+});
+board.addEventListener("pointerleave", () => hammer.classList.remove("visible"));
+
+holes[2].classList.add("demo");
+holes[7].classList.add("demo");
+
+function moveMole(index) {
+  if (active >= 0) holes[active].classList.remove("live");
+  active = index;
+  holes[active].classList.add("live");
+}
+
+function showMole() {
+  const offset = 1 + Math.floor(Math.random() * (holes.length - 1));
+  moveMole(active < 0 ? Math.floor(Math.random() * holes.length) : (active + offset) % holes.length);
+  timer = setTimeout(showMole, 1700);
+}
+
+function play() {
+  if (playing) return;
+  playing = true;
+  retryReady = false;
+  board.classList.add("playing");
+  start.disabled = true;
+  start.textContent = "遊戲進行中";
+  status.textContent = "撳冒出嚟嘅地鼠！用鍵盤可以撳空白鍵。";
+  holes.forEach(hole => hole.classList.remove("demo"));
+  board.tabIndex = 0;
+  board.focus();
+  showMole();
+}
+
+function hit(index, animate = false) {
+  if (!playing || index !== active) return;
+  playing = false;
+  board.classList.remove("playing");
+  clearTimeout(timer);
+  holes[active].classList.remove("live");
+  active = -1;
+  const prizeIndex = Math.floor(Math.random() * prizes.length);
+  const [icon, title, detail] = prizes[prizeIndex];
+  const couponColors = ["#ffc36c", "#d7b9ef", "#f6c5cf", "#f7b5c9", "#fae0a7", "#f6a3c4"];
+  document.querySelector("#coupon").style.setProperty("--accent", couponColors[prizeIndex]);
+  document.querySelector("#result-icon").textContent = icon;
+  document.querySelector("#result-title").textContent = title;
+  document.querySelector("#result-detail").textContent = detail;
+  status.textContent = "打中喇！";
+  board.removeAttribute("tabindex");
+  const reveal = () => {
+    start.disabled = false;
+    start.textContent = "再玩一次";
+    result.returnValue = "";
+    result.showModal();
+  };
+  if (animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) setTimeout(reveal, 170);
+  else reveal();
+}
+
+start.addEventListener("click", play);
+board.addEventListener("keydown", event => {
+  if (event.code === "Space" || event.key === "Enter") {
+    event.preventDefault();
+    if (!event.repeat) hit(active);
+  }
+});
+result.addEventListener("close", () => {
+  if (result.returnValue === "again") play();
+  else start.focus();
+});
+</script>
+</body>
+</html>
