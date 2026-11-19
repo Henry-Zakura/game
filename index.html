@@ -205,7 +205,7 @@ function moveMole(index) {
 function showMole() {
   const offset = 1 + Math.floor(Math.random() * (holes.length - 1));
   moveMole(active < 0 ? Math.floor(Math.random() * holes.length) : (active + offset) % holes.length);
-  timer = setTimeout(showMole, 1700);
+  timer = setTimeout(showMole, 1400);
 }
 
 function play() {
@@ -215,11 +215,18 @@ function play() {
   board.classList.add("playing");
   start.disabled = true;
   start.textContent = "遊戲進行中";
-  status.textContent = "撳冒出嚟嘅地鼠！用鍵盤可以撳空白鍵。";
+  status.textContent = "";
   holes.forEach(hole => hole.classList.remove("demo"));
   board.tabIndex = 0;
   board.focus();
   showMole();
+}
+
+const prizeCutoffs = [6, 12, 13, 88, 94, 100];
+
+function drawPrizeIndex() {
+  const roll = Math.random() * 100;
+  return prizeCutoffs.findIndex(cutoff => roll < cutoff);
 }
 
 function hit(index, animate = false) {
@@ -229,7 +236,7 @@ function hit(index, animate = false) {
   clearTimeout(timer);
   holes[active].classList.remove("live");
   active = -1;
-  const prizeIndex = Math.floor(Math.random() * prizes.length);
+  const prizeIndex = drawPrizeIndex();
   const [icon, title, detail] = prizes[prizeIndex];
   const couponColors = ["#ffc36c", "#d7b9ef", "#f6c5cf", "#f7b5c9", "#fae0a7", "#f6a3c4"];
   document.querySelector("#coupon").style.setProperty("--accent", couponColors[prizeIndex]);
